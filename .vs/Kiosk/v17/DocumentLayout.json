@@ -1,18 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\",
+  "WorkspaceRootPath": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\starl\\onedrive\\documents\\github\\kiosk\\kioskmachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\kioskmachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:kioskmachine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\starl\\onedrive\\documents\\github\\kiosk\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\starl\\onedrive\\documents\\github\\kiosk\\currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\ccvalid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:ccvalid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,15 +26,28 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "CCValid.cs",
+              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CCValid.cs",
+              "RelativeDocumentMoniker": "CCValid.cs",
+              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CCValid.cs",
+              "RelativeToolTip": "CCValid.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T02:30:55.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "CurrencyKeeper.cs",
-              "DocumentMoniker": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
+              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
               "RelativeDocumentMoniker": "CurrencyKeeper.cs",
-              "ToolTip": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
+              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
               "RelativeToolTip": "CurrencyKeeper.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -41,27 +58,26 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "KioskMachine.cs",
-              "DocumentMoniker": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\KioskMachine.cs",
+              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\KioskMachine.cs",
               "RelativeDocumentMoniker": "KioskMachine.cs",
-              "ToolTip": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\KioskMachine.cs",
+              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\KioskMachine.cs",
               "RelativeToolTip": "KioskMachine.cs",
-              "ViewState": "AQIAAEMAAAAAAAAAAAApwFMAAAAAAAAA",
+              "ViewState": "AQIAAE8AAAAAAAAAAAApwGAAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-16T16:54:45.263Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\Program.cs",
+              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\Program.cs",
               "RelativeToolTip": "Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T15:59:16.127Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-16T15:59:16.127Z"
             }
           ]
         }
