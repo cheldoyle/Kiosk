@@ -1,11 +1,118 @@
-﻿using System.Transactions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Transactions;
 
 namespace Kiosk {
     internal class Program {
+        public static List<double> items = new List<double>();
+        public static int i = 1;
         private static void Main(string[] args) {
+            bool continueTransactions = true;
 
-            KioskMachine kiosk = new KioskMachine(500);
-            kiosk.InputRequest();
+            while (continueTransactions) {
+                Console.Clear();
+                DateTime dateTime = DateTime.Now;
+                Console.WriteLine(dateTime.ToString());
+                int transActs = 1;
+                Console.WriteLine($"Transaction: {transActs}");
+                InputRequest();
+
+                double totalSpent = items.Sum();
+                totalSpent = Math.Round(totalSpent, 2);
+
+                MakePayment(totalSpent);
+
+                //ProcessStartInfo startInfo = new ProcessStartInfo();
+                //startInfo.FileName = "ProgramToExecute.exe";
+                //startInfo.Arguments = $"{transActs} {dateTime}";
+                //Process.Start(startInfo);
+
+                string newTrans = Prompt("\nFinished with Your Transactions? Would You Like to Exit? [Y]");
+                newTrans = newTrans.ToLower();
+
+                if (newTrans == "y") {
+                    continueTransactions = false;
+                    break;
+                }
+                transActs++;
+                i = 1;
+                items = new List<double>();
+            }
+        }
+        public static void MakePayment(double totalSpent) {
+            bool validInput = true;
+
+            string option = Prompt($"Total Due: {totalSpent:C}\nPlease Choose A Payment Option: Cash | Credit\n");
+            option = option.ToLower();
+
+            while (validInput) {
+                if (option == "cash") {
+                    CurrencyKeeper.MakePayment(totalSpent);
+                    validInput = false;
+                } else if (option == "credit") {
+                    CurrencyKeeper.ValidEntry(totalSpent);
+                    validInput = false;
+                } else {
+                    Console.Write("Invalid Entry. Please Reenter.");
+                    option = Prompt("Please Choose A Payment Option: Cash | Credit\n");
+                    option = option.ToLower();
+                }
+            }
+        }
+        private static void InputRequest() {
+            bool keepScanning = true;
+            Console.WriteLine("\n-- Scan Items and Press Enter When Done --");
+            while (keepScanning) {
+                bool isValid = ItemInput();
+                if (isValid == false) {
+                    keepScanning = false;
+                }
+            }
+        }
+        private static bool ItemInput() {
+            double price = 0;
+            double totalSpent = 0;
+            bool hasValue = true;
+            bool isValid = false;
+
+            while (isValid == false) {
+                Console.Write($"Item {i} Price: ");
+                string priceStr = Console.ReadLine();
+                if (priceStr == "") {
+                    hasValue = false;
+                    return hasValue;
+                } else {
+                    int count = Regex.Count(priceStr, "[0-9.-.]");
+                    if (count != priceStr.Length) {
+                        while (count != priceStr.Length) {
+                            Console.Write($"Error: Invalid input. Please enter a valid price amount for item {i}: ");
+                            priceStr = Console.ReadLine();
+                            if (priceStr == "") {
+                                hasValue = false;
+                                return hasValue;
+                            }
+                            count = Regex.Count(priceStr, "[0-9.-.]");
+                            if (count == priceStr.Length) {
+                                price = double.Parse(priceStr);
+                                price = Math.Round(price, 2);
+                                totalSpent += price;
+                                totalSpent = Math.Round(totalSpent, 2);
+                                items.Add(price);
+                                i++;
+                            }
+                        }
+                    } else {
+                        isValid = true;
+                        price = double.Parse(priceStr);
+                        price = Math.Round(price, 2);
+                        totalSpent += price;
+                        totalSpent = Math.Round(totalSpent, 2);
+                        items.Add(price);
+                    }
+                }
+            }
+            i++;
+            return hasValue;
         }
 
         #region PROMPT FUNCTIONS

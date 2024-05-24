@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Kiosk
-build_property.ProjectDir = C:\Users\chels\Documents\GitHub\Kiosk\
+build_property.ProjectDir = C:\Users\starl\OneDrive\Documents\GitHub\Kiosk\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
