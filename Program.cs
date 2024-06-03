@@ -47,19 +47,20 @@ namespace Kiosk {
                 string receiptTwo = Convert.ToString(receiptInfo[1]); // CONVERTS SECOND ITEM FOR RECEIPT (CHANGE FOR CASH, PAID AMOUNT FOR CARD)
                 string receiptThree = Convert.ToString(receiptInfo[2]); // CONVERTS THIRD ITEM FOR CARD TRANSACTIONS - CHANGE (IF CASH BACK)
 
-                if (receiptInfo[3] == "cash") { // CHECKS IF LAST ELEMENT OF RECEIPT IS CASH
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
-                    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Paid:{receiptInfo[0]} Change:{receiptInfo[1]}";
-                    Process.Start(startInfo);
-                } else if (receiptInfo[3] == "credit") { // CHECKS IF LAST ELEMENT IS CREDIT
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
-                    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Card:{receiptInfo[0]} Paid:{receiptInfo[1]} Change:{receiptInfo[2]}";
-                    Process.Start(startInfo);
-                }
+                //if (receiptInfo[3] == "cash") { // CHECKS IF LAST ELEMENT OF RECEIPT IS CASH
+                //    ProcessStartInfo startInfo = new ProcessStartInfo();
+                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Paid:{receiptInfo[0]} Change:{receiptInfo[1]}";
+                //    Process.Start(startInfo);
+                //} else if (receiptInfo[3] == "credit") { // CHECKS IF LAST ELEMENT IS CREDIT
+                //    ProcessStartInfo startInfo = new ProcessStartInfo();
+                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Card:{receiptInfo[0]} Paid:{receiptInfo[1]} Change:{receiptInfo[2]}";
+                //    Process.Start(startInfo);
+                //}
                 // OPTION TO DO A FOLLOWUP TRANSACTION
-                string newTrans = Prompt("\nFinished with Your Transactions? Would You Like to Exit? [Y]");
+                Console.Write("\nFinished with Your Transactions? Would You Like to Exit? [Y]");
+                string newTrans = Console.ReadLine();
                 newTrans = newTrans.ToLower();
                 // WILL ONLY EXIT IF Y IS ENTERED INTO THE CONSOLE
                 if (newTrans == "y") {

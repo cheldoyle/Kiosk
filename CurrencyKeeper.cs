@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -108,7 +109,7 @@ namespace Kiosk {
 
         // CREDIT CARD FUNCTIONS
 
-        public static string[] ValidEntry(double amountSpent) {
+        public static string[] ValidEntryOG(double amountSpent) {
             string[] receipts = new string[4]; // RECEIPT INFO TO GO TO PROGRAM
             string cardNo = ""; // CARD NUMBER
             string cardType = ""; // CARD TYPE (VISA, MC, DISCOVER, AE)
@@ -334,6 +335,148 @@ namespace Kiosk {
                 }
             }
             return receipts;
+        }
+        public static string[] ValidEntry(double amountSpent) {
+            string[] receipts = new string[4]; // RECEIPT INFO TO GO TO PROGRAM
+            string cardNo = ""; // CARD NUMBER
+            string cardType = ""; // CARD TYPE (VISA, MC, DISCOVER, AE)
+            bool validIn = true; // CHECKS FOR VALID INPUT FOR CREDIT CARD ENTRY
+            string[] cardValid = new string[2]; // STRING ARRAY FOR RETURN PASS OR DECLINED STATE
+            double paidAmnt = 0; // AMOUNT PAID BY CARD - AMOUNTSPENT
+            double cashAmnt = 0; // CASH REQUESTED
+            bool cashBackBool = true; // CHECKS IF USER WANTS CASH BACK
+            bool gotCash = false; // GOES TO TRUE IF USER WANTS CASH
+            bool notEntered = true; // CHECKS FOR ISSUES IN USER INPUT FOR CREDIT CARD
+            bool partial = false;
+            double partialPay = 0;
+
+            string cashBack = Program.Prompt("\nCash Back? Y | N\n"); // ASKS FOR CASH BACK FIRST
+            cashBack = cashBack.ToLower();
+
+            while (cashBackBool) {
+                if (cashBack == "y") { // IF Y
+                    cashAmnt = Program.PromptDubs("\n[Max $100.00] Cash Back Amount: "); // SETS MAX TO AVOID TOO HIGH NUMS
+                    if (cashAmnt <= 100) { // CHECKS FOR LESS THAN OR EQUAL TO MAX
+                        cashAmnt = CashBack(cashAmnt);
+                        cashBackBool = false;
+                        gotCash = true;
+                    } else {
+                        Console.WriteLine($"\nError: Max Cash Back Amount is $100.00\n");
+                    }
+                } else if (cashBack != "y" && cashBack != "n") {
+                    Console.WriteLine("\nError: Invalid Response. Please Try Again.");
+                    cashBack = Program.Prompt("Cash Back? Y | N\n");
+                } else if (cashBack == "n") { // IMMEDIATELY EXITS IF NO
+                    cashBackBool = false;
+                }
+            }
+
+
+            cardValid = NotDeclined(amountSpent); // GRABS CC RUN RESULTS
+            cardType = CardType(cardValid[0]); // GRABS CARDTYPE
+            receipts[0] = cardType; // SETS FIRST ITEM IN LIST TO CARD TYPE
+
+            Console.WriteLine($"\nCard: {cardType} {cardValid[0]}"); // DISPLAYS CARD
+
+            bool paidInFull = false;
+            while (paidInFull == false) {
+                if (cardValid[1] != "declined") {
+                    partialPay = double.Parse(cardValid[1]);
+                    if (partialPay < amountSpent) {
+                        partial = true;
+                    }
+                    if (partial) {
+                        while (partial) {
+                            Console.Write($"\nPartial Paid: {partialPay:C}. \nPlease Choose Another Payment Option for the Remaining Balance [{(amountSpent - partialPay):C}]: ");
+                            if (gotCash && cashAmnt != 0) {
+                                cardValid = NotDeclined((amountSpent - partialPay));
+                                double amntCharged = double.Parse(cardValid[1]);
+                                Console.WriteLine($"Amount Charged: {amntCharged:C}");
+                                partialPay = partialPay + double.Parse(cardValid[1]);
+                                partialPay = Math.Round(partialPay, 2);
+                                Console.WriteLine($"\nCard: {cardType} {cardValid[0]} \nTotal Paid: {partialPay:C}\n"); // DISPLAYS CARD TYPE AND PAID AMOUNT
+                                partial = partialPay < amountSpent;
+                                if (partial == false) {
+                                    paidInFull = true;
+                                }
+                            } else {
+                                Console.Write("\nWould You Like to Use Cash or Credit? ");
+                                string paymentOption = Console.ReadLine();
+                                paymentOption = paymentOption.ToLower();
+                                bool paymentChosen = false;
+                                while (paymentChosen == false) {
+                                    if (paymentOption == "credit") {
+                                        cardValid = NotDeclined((amountSpent - partialPay));
+                                        double amntCharged = double.Parse(cardValid[1]);
+                                        Console.WriteLine($"Amount Charged: {amntCharged:C}");
+                                        partialPay = partialPay + double.Parse(cardValid[1]);
+                                        partialPay = Math.Round(partialPay, 2);
+                                        Console.WriteLine($"\nCard: {cardType} {cardValid[0]} \nTotal Paid: {partialPay:C}\n"); // DISPLAYS CARD TYPE AND PAID AMOUNT
+                                        partial = partialPay < amountSpent;
+                                        if (partial == false) {
+                                            paidInFull = true;
+                                        }
+                                        paymentChosen = true;
+                                    } else if (paymentOption == "cash") {
+                                        receipts = MakePayment((amountSpent - partialPay));
+                                        paymentChosen = true;
+                                    } else {
+                                        Console.Write("Error: Please Choose Cash or Credit: ");
+                                        paymentOption = Console.ReadLine();
+                                        paymentOption = paymentOption.ToLower();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        paidAmnt = double.Parse(cardValid[1]); // DOUBLE PARSE TOTAL PAID
+                        paidAmnt = Math.Round(paidAmnt, 2); // FOR MATH XX.XX FORMAT
+                        receipts[1] = Convert.ToString($"{paidAmnt:C}"); // SETS SECOND ITEM TO PAID AMOUNT FOR CREDIT
+                        Console.WriteLine($"Amount Paid: {paidAmnt:C}");
+                        paidInFull = true;
+                        if (gotCash && cashAmnt != 0) { // CHECKS IF CASH REQUESTED
+                            Console.WriteLine($"Cash Back: {cashAmnt:C}"); // DISPLAYS CASH BACK
+                            receipts[2] = Convert.ToString(cashAmnt); // ADDS CASH BACK TO RECEIPT
+                            MakeChange(cashAmnt); // GOES THROUGH CHANGE MAKER TO DISPLAY CASH BACK
+                        }
+                    }
+                }
+            }
+            return receipts;
+        }
+        static string[] NotDeclined (double amount) {
+            bool validIn = true;
+            bool notEntered = true;
+            bool declined = true;
+            string cardNo = "";
+            string[] cardValid = new string[4];
+
+            while (declined) {
+                validIn = true;
+                while (validIn) { // KEEPS USER IN LOOP FOR VALID CC INPUT
+                    cardNo = Program.Prompt("\nEnter Your Credit Card Number: ");
+                    if (cardNo.Length < 15) { // CHECKS FOR APPROPRIATE CC LENGTH
+                        while (notEntered) {
+                            cardNo = Program.Prompt("\nEntry Error: Enter Your Credit Card Number: ");
+                            if (cardNo.Length >= 15) { // EXITS WHEN 15+ CC ENTRY
+                                notEntered = false;
+                            }
+                        }
+                    }
+                    if (checkLuhn(cardNo) == true) { // CHECKS FOR VALID CC INPUT
+                        cardValid = MoneyRequest(cardNo, amount); // GRABS AMOUNT AND PAYMENT STATE FROM RANDOM DECLINE FUNCTION
+                        if (cardValid[1] != "declined") {
+                            declined = false;
+                        } else {
+                            Console.WriteLine("\nCard Declined: Please Reenter\n");
+                        }
+                        validIn = false; // EXITS LOOP
+                    } else {
+                        Console.WriteLine("\nInvalid Input. Please Try Again.");
+                    }
+                }
+            }
+            return cardValid;
         }
         static double CashBack(double cashWanted) {
             double returnCash = 0; // HOW MUCH TO RETURN FOR CASH BACK
