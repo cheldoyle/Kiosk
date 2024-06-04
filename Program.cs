@@ -39,25 +39,46 @@ namespace Kiosk {
                 double totalSpent = items.Sum(); // TAKES SUM OF EVERY INPUT IN LIST
                 totalSpent = Math.Round(totalSpent, 2); // SETS TOTAL TO XX.XX FORMAT FOR MATH
 
-                receiptInfo = MakePayment(totalSpent); // GOES INTO MAKEPAYMENT FUNCTION TO BEGIN CASH OR CREDIT - STORES RESULT IN RECEIPT LIST
+                if (totalSpent > 0) {
+                    receiptInfo = MakePayment(totalSpent); // GOES INTO MAKEPAYMENT FUNCTION TO BEGIN CASH OR CREDIT - STORES RESULT IN RECEIPT LIST
+                }
 
                 string transactionNum = Convert.ToString(transActs); // TRANSACTION NUM FOR RECEIPT
                 string dateDay = Convert.ToString(dateTime); // DATE INFO FOR RECEIPT
-                string receiptOne = Convert.ToString(receiptInfo[0]); // CONVERTS FIRST ITEM FOR RECEIPT (PAID AMOUNT FOR CASH, CARD TYPE FOR CARD)
-                string receiptTwo = Convert.ToString(receiptInfo[1]); // CONVERTS SECOND ITEM FOR RECEIPT (CHANGE FOR CASH, PAID AMOUNT FOR CARD)
-                string receiptThree = Convert.ToString(receiptInfo[2]); // CONVERTS THIRD ITEM FOR CARD TRANSACTIONS - CHANGE (IF CASH BACK)
 
                 //if (receiptInfo[3] == "cash") { // CHECKS IF LAST ELEMENT OF RECEIPT IS CASH
                 //    ProcessStartInfo startInfo = new ProcessStartInfo();
-                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
-                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Paid:{receiptInfo[0]} Change:{receiptInfo[1]}";
+                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0/\ReceiptBuilder.exe";
+                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Paid:{receiptInfo[0]} Change:{receiptInfo//[1]}";
                 //    Process.Start(startInfo);
                 //} else if (receiptInfo[3] == "credit") { // CHECKS IF LAST ELEMENT IS CREDIT
                 //    ProcessStartInfo startInfo = new ProcessStartInfo();
-                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
-                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Card:{receiptInfo[0]} Paid:{receiptInfo[1]} Change:{receiptInfo[2]}";
+                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0/\ReceiptBuilder.exe";
+                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Card:{receiptInfo[0]} Paid:{receiptInfo/[1]} /Change:{receiptInfo[2]}";
                 //    Process.Start(startInfo);
                 //}
+
+                string cardDisplay = "";
+                string changeDisplay = "";
+
+                if (receiptInfo[0] != null) { // CHECKS IF CARD WAS USED
+                    cardDisplay = "Card:";
+                }
+                if (receiptInfo[2] != null) { // CHECKS IF CHANGE GIVEN
+                    changeDisplay = "Change:";
+                    double moneyfyChange = Convert.ToDouble(receiptInfo[2]); // TURNS STRING TO DOUBLE
+                    receiptInfo[2] = Convert.ToString($"{moneyfyChange:C}"); // TURNS BACK TO STRING WITH $XX.XX FORMAT
+                }
+
+                double moneyfyPaid = Convert.ToDouble(receiptInfo[1]); // STRING TO DOUBLE
+                receiptInfo[1] = Convert.ToString($"{moneyfyPaid:C}"); // BACK TO STRING WITH $XX.XX FORMAT
+
+                // DISPLAYS ONLY RELEVENT INFO
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
+                Process.Start(startInfo);
+
                 // OPTION TO DO A FOLLOWUP TRANSACTION
                 Console.Write("\nFinished with Your Transactions? Would You Like to Exit? [Y]");
                 string newTrans = Console.ReadLine();
@@ -75,7 +96,6 @@ namespace Kiosk {
         public static string[] MakePayment(double totalSpent) {
             bool validInput = true; // BOOL TO ENSURE VALID INPUT FOR CASH OR CREDIT
             string[] receiptInfo = new string[4]; // STRING TO HOLD RECEIPT INFO
-            string payType = ""; // PAYTYPE FOR DETERMINING WHAT TYPE OF RECEIPT TO DISPLAY
 
             string option = Prompt($"Total Due: {totalSpent:C}\nPlease Choose A Payment Option: Cash | Credit\n");
             option = option.ToLower();
@@ -83,11 +103,9 @@ namespace Kiosk {
             while (validInput) {
                 if (option == "cash") {
                     receiptInfo = CurrencyKeeper.MakePayment(totalSpent); // GOES INTO CASH SECTION OF CURRENCY CLASS
-                    payType = "cash";
                     validInput = false;
                 } else if (option == "credit") {
                     receiptInfo = CurrencyKeeper.ValidEntry(totalSpent); // GOES INTO CREDIT SECTION OF CURRENCY CLASS
-                    payType = "credit";
                     validInput = false;
                 } else {
                     Console.WriteLine("Invalid Entry. Please Reenter.");
@@ -95,7 +113,6 @@ namespace Kiosk {
                     option = option.ToLower();
                 }
             }
-            receiptInfo[3] = payType;
             return receiptInfo;
         }
         private static void InputRequest() {
@@ -108,42 +125,45 @@ namespace Kiosk {
                 }
             }
         }
+        private static bool PriceWriter(string priceStr) {
+            double price = 0;
+            bool validation = true;
+
+            validation = double.TryParse(priceStr, out price); // CHECKS IF INPUT CAN BE PARSED
+
+            if (validation) { // IF VALID DOUBLE
+                if (price < 0) { // DOESN'T ALLOW NEGATIVE
+                    Console.WriteLine("\nError: Cannot Accept Amounts Under $.01\n");
+                    validation = false;
+                } else {
+                    items.Add(price); // ADDS VALID ENTRIES INTO LIST
+                }
+            }
+
+            return validation;
+        }
         private static bool ItemInput() {
             double price = 0; // TO CONVERT STRING TO DOUBLE IF INPUT IS NOT EMPTY
             bool hasValue = true; // CHECKS IF INPUT CONTAINS VALUE OR IS EMPTY
             bool isValid = false; // CHECKS FOR VALID INPUT TO FILTER OUT UNDESIRED INPUTS
 
-            while (isValid == false) {
+            while (!isValid) {
                 Console.Write($"Item {i} Price: "); // USES I TO DISPLAY ITEM NUM
                 string priceStr = Console.ReadLine(); // TAKES INITIAL INPUT AS STRING
                 if (priceStr == "") { // CHECKS IF INPUT IS EMPTY
                     hasValue = false; // SETS BOOL TO FALSE
                     return hasValue; // RETURNS FALSE TO INPUTREQUEST
+                }  else if (priceStr == "kiosk") {
+                    CurrencyKeeper.DisplayKioskInfo();
                 } else {
-                    int count = Regex.Count(priceStr, "[0-9.-.]"); // CREATES AND SETS COUNT TO NUMBER OF NUMS AND DECIMALS IN INPUT
-                    int decCount = Regex.Count(priceStr, "[.-.]"); // CHECKS HOW MANY DECIMALS IN INPUT TO AVOID TOO MANY
-                    if (count != priceStr.Length && decCount <= 1) { // CHECKS IF COUNT == LENGTH OF PRICESTR TO FILTER OUT LETTERS OR OTHER SYMBOLS AND AVOID TOO MANY DECIMALS
-                        while (count != priceStr.Length && decCount <= 1) { // KEEPS IN LOOP TO MAKE SURE ONLY NUMBERS AND DECIMALS APPEAR
-                            Console.Write($"Error: Invalid input. Please enter a valid price amount for item {i}: ");
-                            priceStr = Console.ReadLine();
-                            if (priceStr == "") { // CHECKS AGAIN FOR EMPTY INPUT IF INTENTION WAS TO EXIT
-                                hasValue = false;
-                                return hasValue;
-                            }
-                            count = Regex.Count(priceStr, "[0-9.-.]"); // CHECKS AGAIN FOR COUNTS
-                            decCount = Regex.Count(priceStr, "[.-.]");
-                            if (count == priceStr.Length && decCount <= 1) {
-                                price = double.Parse(priceStr); // SETS TO DOUBLE FROM STRING
-                                price = Math.Round(price, 2); // ROUNDS TO XX.XX FORMAT TO AVOID MATH ERRORS
-                                items.Add(price); // ADDS PRICE TO ITEMS LIST
-                                i++;
-                            }
+                    isValid = PriceWriter(priceStr); // CHECKS IF INPUT IS IN PROPER DOUBLE FORMAT
+                    if (isValid == false) { // IF IT ISN'T
+                        while (isValid == false) {
+                            ColorText("\nError: Incorrect Value Type. Please Enter A Number.\n", ConsoleColor.DarkRed, false);
+                            Console.Write($"Item {i} Price:");
+                            priceStr = Prompt(" ");
+                            isValid = PriceWriter(priceStr); // CONTINUES TO CHECK AND UPDATE UNTIL MEETS CORRECT FORMAT
                         }
-                    } else { // GOES HERE IF INITIAL INPUT CORRECT
-                        isValid = true; // SETS TO TRUE TO RETURN TO INPUT REQUEST
-                        price = double.Parse(priceStr); // SETS PRICE TO DOUBLE FROM STRING
-                        price = Math.Round(price, 2); // ROUNDS TO AVOID MATH ERRORS
-                        items.Add(price); // ADDS TO ITEMS LIST
                     }
                 }
             }
@@ -187,7 +207,7 @@ namespace Kiosk {
             string input = Prompt(prompt);
 
             while (!double.TryParse(input, out value)) {
-                ColorText("Error: Incorrect value type. Please enter a number:", ConsoleColor.DarkRed, false);
+                ColorText("\nError: Incorrect Value Type. Please Enter A Valid Number.", ConsoleColor.DarkRed, false);
                 input = Prompt(" ");
             }
 
