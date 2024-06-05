@@ -134,7 +134,11 @@ namespace Kiosk {
                         if (cashAmnt <= 100 && cashAmnt > 0) { // CHECKS FOR LESS THAN OR EQUAL TO MAX
                             cashAmnt = CashBack(cashAmnt);
                             cashBackBool = false;
-                            gotCash = true;
+                            if (cashAmnt == 0) {
+                                gotCash = false;
+                            } else {
+                                gotCash = true;
+                            }
                         } else {
                             Console.WriteLine($"\nError: Max Cash Back Amount is $100.00\n");
                         }
@@ -161,7 +165,7 @@ namespace Kiosk {
                 if (partial) { // IF PAID IS LESS THAN TOTAL
                     while (partial) { // KEEPS IN LOOP WHILE AMOUNT IS BELOW OWED
                         Console.Write($"\nPartial Paid: {partialPay:C}. \nPlease Choose Another Payment Option for the Remaining Balance [{(amountSpent - partialPay):C}]: ");
-                        if (gotCash && cashAmnt != 0) { // CHECKS IF CASH BACK - CAN ONLY USED CARDS IF GOT CASH BACK
+                        if (gotCash) { // CHECKS IF CASH BACK - CAN ONLY USED CARDS IF GOT CASH BACK
                             cardValid = NotDeclined((amountSpent - partialPay)); // SENDS AMOUNT LEFT INTO DECLINE, PAY FUNCTION
                             double amntCharged = double.Parse(cardValid[1]); // GRABS AMOUNT CHARGED THIS ROUND
                             Console.WriteLine($"Amount Charged: {amntCharged:C}"); // DISPLAYS AMOUNT CHARGED
