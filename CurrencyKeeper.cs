@@ -79,7 +79,6 @@ namespace Kiosk {
         public static bool MakeChange(double totalPrice) { // CHANGE MAKER
             int denomLen = denoms.Length; // LENGTH OF HOW MANY DENOMINATIONS THERE ARE
             List<double> totalChange = new List<double>(); // LIST FOR EACH CHANGE AMOUNT
-            bool kioskEmpty = false; // CHECKS IF NO CASH LEFT IN KIOSK
             double amountToPay = totalPrice;
             bool kioskMadeChange = false;
 

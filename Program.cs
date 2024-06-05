@@ -15,11 +15,13 @@ namespace Kiosk {
             string day = timeOfDay.Day.ToString();
             string year = timeOfDay.Year.ToString();
 
-            StreamWriter writer = new StreamWriter($"C:\\Users\\starl\\OneDrive\\Desktop\\{month}-{day}-{year}-Transactions.txt");
+            StreamWriter writer = new StreamWriter($"C:\\Users\\Chels\\Desktop\\{month}-{day}-{year}-Transactions.txt", true);
 
             for (int i = 0; i < args.Length; i++) {
                 writer.WriteLine(args[i]);
             }
+
+            writer.WriteLine("\n\n\n");
 
             writer.Close();
 
@@ -46,18 +48,6 @@ namespace Kiosk {
                 string transactionNum = Convert.ToString(transActs); // TRANSACTION NUM FOR RECEIPT
                 string dateDay = Convert.ToString(dateTime); // DATE INFO FOR RECEIPT
 
-                //if (receiptInfo[3] == "cash") { // CHECKS IF LAST ELEMENT OF RECEIPT IS CASH
-                //    ProcessStartInfo startInfo = new ProcessStartInfo();
-                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0/\ReceiptBuilder.exe";
-                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Paid:{receiptInfo[0]} Change:{receiptInfo//[1]}";
-                //    Process.Start(startInfo);
-                //} else if (receiptInfo[3] == "credit") { // CHECKS IF LAST ELEMENT IS CREDIT
-                //    ProcessStartInfo startInfo = new ProcessStartInfo();
-                //    startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0/\ReceiptBuilder.exe";
-                //    startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} Card:{receiptInfo[0]} Paid:{receiptInfo/[1]} /Change:{receiptInfo[2]}";
-                //    Process.Start(startInfo);
-                //}
-
                 string cardDisplay = "";
                 string changeDisplay = "";
 
@@ -74,8 +64,13 @@ namespace Kiosk {
                 receiptInfo[1] = Convert.ToString($"{moneyfyPaid:C}"); // BACK TO STRING WITH $XX.XX FORMAT
 
                 // DISPLAYS ONLY RELEVENT INFO
+                //ProcessStartInfo startInfo = new ProcessStartInfo();
+                //startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                //startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
+                //Process.Start(startInfo);
+
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                startInfo.FileName = @"C:\Users\chels\source\repos\ReceiptMaker\bin\Debug\net8.0\ReceiptMaker.exe";
                 startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
                 Process.Start(startInfo);
 
