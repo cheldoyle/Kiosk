@@ -21,7 +21,7 @@ namespace Kiosk {
                 writer.WriteLine(args[i]);
             }
 
-            writer.WriteLine("\n\n\n");
+            writer.WriteLine();
 
             writer.Close();
 
@@ -63,15 +63,12 @@ namespace Kiosk {
                 double moneyfyPaid = Convert.ToDouble(receiptInfo[1]); // STRING TO DOUBLE
                 receiptInfo[1] = Convert.ToString($"{moneyfyPaid:C}"); // BACK TO STRING WITH $XX.XX FORMAT
 
-                // DISPLAYS ONLY RELEVENT INFO
-                //ProcessStartInfo startInfo = new ProcessStartInfo();
-                //startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
-                //startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
-                //Process.Start(startInfo);
+                Random rnd = new Random();
+                int transID = rnd.Next(10000, 100000); // CREATES RANDOM NUM FOR ID (AESTHETIC ONLY)
 
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = @"C:\Users\chels\source\repos\ReceiptMaker\bin\Debug\net8.0\ReceiptMaker.exe";
-                startInfo.Arguments = $"{transactionNum} {dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
+                startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                startInfo.Arguments = $"Transaction:{transactionNum} ID:{transID} Date:{dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
                 Process.Start(startInfo);
 
                 // OPTION TO DO A FOLLOWUP TRANSACTION

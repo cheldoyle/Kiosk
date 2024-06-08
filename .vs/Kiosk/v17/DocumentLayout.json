@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\",
+  "WorkspaceRootPath": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\starl\\onedrive\\documents\\github\\kiosk\\currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:currencykeeper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\chels\\documents\\github\\kiosk\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|c:\\users\\starl\\onedrive\\documents\\github\\kiosk\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB4F0CB0-21F6-4A3B-9E48-EB6A173ECE6F}|Kiosk.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -24,11 +24,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "CurrencyKeeper.cs",
-              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
+              "DocumentMoniker": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
               "RelativeDocumentMoniker": "CurrencyKeeper.cs",
-              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
+              "ToolTip": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\CurrencyKeeper.cs",
               "RelativeToolTip": "CurrencyKeeper.cs",
-              "ViewState": "AQIAAJMAAAAAAAAAAAAYwCwBAAAJAAAA",
+              "ViewState": "AQIAAO0AAAAAAAAAAAAswLUAAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-17T15:53:03.628Z",
               "EditorCaption": ""
@@ -37,11 +37,11 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\chels\\Documents\\GitHub\\Kiosk\\Program.cs",
+              "ToolTip": "C:\\Users\\starl\\OneDrive\\Documents\\GitHub\\Kiosk\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAEAAAAAAAAAAAAAgwBQAAAAqAAAA",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAQwEcAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-16T15:59:16.127Z",
               "EditorCaption": ""

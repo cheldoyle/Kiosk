@@ -85,7 +85,8 @@ namespace Kiosk {
             for (int i = denomLen - 1; i >= 0; i--) { // GOES THROUGH DENOMS BY LENGTH
                 while (amountToPay >= denoms[i]) { // CONTINUES SORTING THROUGH CHANGE WHILE TOTAL IS ABOVE DENOM AMOUNT
                     amountInKiosk -= denoms[i];
-                    if (amountInKiosk <= 0) {
+                    if (amountInKiosk < 0) {
+                        amountInKiosk += denoms[i];
                         kioskEmpty = true;
                         break;
                     }
@@ -95,6 +96,7 @@ namespace Kiosk {
             }
             if (kioskEmpty) { // CHECKS IF NOTHING IN KIOSK
                 Console.WriteLine("\nKiosk is Currently Out of Money. Return to Payment Screen to Choose a Different Method\n"); // ALLOWS USER TO RETURN TO CHOOSE CREDIT
+                amountInKiosk = totalChange.Sum();
             }
             if (kioskEmpty == false) {
                 Console.WriteLine("\n--- Thank You For Your Patronage! Please Take Your Change ---");
@@ -124,6 +126,8 @@ namespace Kiosk {
             double partialPay = 0;
             double totalCreditAndCash = 0;
 
+            kioskEmpty = amountInKiosk <= 0;
+
             if (!kioskEmpty) { // CHECKS IF THERE'S MONEY IN KIOSK BEFORE ASKING FOR CASH BACK
                 string cashBack = Program.Prompt("\nCash Back? Y | N\n"); // ASKS FOR CASH BACK FIRST
                 cashBack = cashBack.ToLower();
@@ -133,6 +137,7 @@ namespace Kiosk {
                         cashAmnt = Program.PromptDubs("\n[Max $100.00] Cash Back Amount: "); // SETS MAX TO AVOID TOO HIGH NUMS
                         if (cashAmnt <= 100 && cashAmnt > 0) { // CHECKS FOR LESS THAN OR EQUAL TO MAX
                             cashAmnt = CashBack(cashAmnt);
+                            cashAmnt = Math.Round(cashAmnt, 2);
                             cashBackBool = false;
                             if (cashAmnt == 0) {
                                 gotCash = false;
@@ -222,7 +227,6 @@ namespace Kiosk {
                     if (gotCash && cashAmnt != 0) { // CHECKS IF CASH REQUESTED
                         Console.WriteLine($"Cash Back: {cashAmnt:C}"); // DISPLAYS CASH BACK
                         receipts[2] = Convert.ToString(cashAmnt); // ADDS CASH BACK TO RECEIPT
-                        MakeChange(cashAmnt); // GOES THROUGH CHANGE MAKER TO DISPLAY CASH BACK
                     }
                 }
             }
@@ -272,11 +276,13 @@ namespace Kiosk {
             double totalWanted = cashWanted;
             // GOES THROUGH KIOSK SIMILAR TO MAKING CHANGE - CHECKS IF KIOSK CAN MAKE CHANGE
 
+
             for (int i = denomLen - 1; i >= 0; i--) { // GOES THROUGH DENOMS BY LENGTH
                 while (totalWanted >= denoms[i]) { // CONTINUES SORTING THROUGH CHANGE WHILE TOTAL IS ABOVE DENOM AMOUNT
                     amountInKiosk -= denoms[i];
-                    if (amountInKiosk <= 0) {
+                    if (amountInKiosk < 0) {
                         kioskEmpty = true;
+                        amountInKiosk += denoms[i];
                         break;
                     }
                     returnCash += denoms[i];
@@ -285,6 +291,8 @@ namespace Kiosk {
             }
             if (kioskEmpty) { // CHECKS IF NOTHING IN KIOSK
                 Console.WriteLine("\nKiosk is Currently Out of Money. Cannot Supply Cash Back. Please Return\n");
+                amountInKiosk = returnCash;
+                returnCash = 0;
             }
 
             return returnCash;
