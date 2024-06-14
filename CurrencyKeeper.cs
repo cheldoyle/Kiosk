@@ -8,14 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Kiosk {
-    internal class CurrencyKeeper {
+    public static class CurrencyKeeper {
 
         static double[] denoms = { .01, .05, .10, .25, .50, 1.00, 2.00, 5.00, 10.00, 20.00, 50.00, 100.00 }; // EACH DENOM
-        static double amountInKiosk = 300;
+        static double[] denomAmnts = { 1000, 10, 10, 10, 5, 10, 5, 10, 1, 1, 1, 1 }; // EACH DENOM
+        static double amountInKiosk = SetKiosk();
         static bool kioskEmpty = false;
+
+        public static double SetKiosk() {
+            double amounts = 0;
+            for (int i = 0; i < denomAmnts.Length; i++) {
+                amounts += denoms[i] * denomAmnts[i];
+            }
+            return amounts;
+        }
 
         public static void DisplayKioskInfo() {
             Console.WriteLine($"Amount in Kiosk: {amountInKiosk:C}");
+
+            for (int i = 0;i < denomAmnts.Length; i++) {
+                Console.WriteLine($"Value: {denoms[i]:C} | Amount in Kiosk: {denomAmnts[i]}");
+            }
         }
 
         // CASH FUNCTIONS
@@ -29,10 +42,11 @@ namespace Kiosk {
             int i = 1; // COUNTER FOR PAYMENT NUMBER
             double displayAmount = totalSpent - paidAmnt;
             bool noMoneyInKiosk = false;
+            double[] denomsToUse = { .01, .05, .10, .25, .50, 1.00, 2.00, 5.00, 10.00, 20.00, 50.00, 100.00 }; // EACH DENOM
 
             Console.Write("\n--- Valid Currency Amounts (Coins and Dollars) Only ---\nAllowed Amounts: ");
             for (int c = 0; c < denoms.Length; c++) {
-                Console.Write($"{denoms[c]:C} "); // DISPLAYS ALLOWED PAYMENT AMOUNT INPUTS
+                Console.Write($"{denomsToUse[c]:C} "); // DISPLAYS ALLOWED PAYMENT AMOUNT INPUTS
             }
             while (inputTotal > 0) { // CONTINUES WHILE TOTAL TO PAY IS ABOVE 0
                 paidAmnt = Program.PromptDubs($"\nCurrent total: {displayAmount:C}\nPayment {i}: "); // ASKS FOR PAYMENT
@@ -66,9 +80,10 @@ namespace Kiosk {
         }
         public static bool CurrencyCheck(double price) { // CHECKS IF VALID CURRENCY
             bool paymentSuccess = false;
+            double[] denomsToUse = { .01, .05, .10, .25, .50, 1.00, 2.00, 5.00, 10.00, 20.00, 50.00, 100.00 }; // EACH DENOM
 
             for (int i = 0; i < denoms.Length; i++) {
-                if (price == denoms[i]) { // IF PRICE IS EQUAL TO ANYTHING IN DENOMS, RETURNS TRUE
+                if (price == denomsToUse[i]) { // IF PRICE IS EQUAL TO ANYTHING IN DENOMS, RETURNS TRUE
                     paymentSuccess = true;
                 }
             }
@@ -81,24 +96,44 @@ namespace Kiosk {
             List<double> totalChange = new List<double>(); // LIST FOR EACH CHANGE AMOUNT
             double amountToPay = totalPrice;
             bool kioskMadeChange = false;
+            double[] moneyUsed = new double[denoms.Length];
+
+            for (int i = 0; i < denoms.Length; i++) {
+                moneyUsed[i] = denomAmnts[i];
+            }
 
             for (int i = denomLen - 1; i >= 0; i--) { // GOES THROUGH DENOMS BY LENGTH
                 while (amountToPay >= denoms[i]) { // CONTINUES SORTING THROUGH CHANGE WHILE TOTAL IS ABOVE DENOM AMOUNT
-                    amountInKiosk -= denoms[i];
+                    amountInKiosk = SetKiosk();
                     if (amountInKiosk < 0) {
-                        amountInKiosk += denoms[i];
                         kioskEmpty = true;
                         break;
                     }
-                    amountToPay -= denoms[i];
-                    totalChange.Add(denoms[i]);
+                    if (denomAmnts[i] > 0) {
+                        denomAmnts[i]--;
+                        amountToPay -= denoms[i];
+                        amountToPay = Math.Round(amountToPay, 2); // THIS SHOULD FIX THE PENNY FRAUD - COULD'VE ALSO DONE WHILE AMOUNTINKIOSK > 0 PROBABLY?
+                        totalChange.Add(denoms[i]);
+                    } else {
+                        break;
+                    }
                 }
+            }
+
+            double amountGiven = totalChange.Sum();
+            amountGiven = Math.Round(amountGiven, 2);
+
+            if (amountGiven < totalPrice) {
+                kioskMadeChange = false;
+                denomAmnts = moneyUsed;
+                amountInKiosk = SetKiosk();
+            } else {
+                kioskMadeChange = true;
             }
             if (kioskEmpty) { // CHECKS IF NOTHING IN KIOSK
                 Console.WriteLine("\nKiosk is Currently Out of Money. Return to Payment Screen to Choose a Different Method\n"); // ALLOWS USER TO RETURN TO CHOOSE CREDIT
-                amountInKiosk = totalChange.Sum();
             }
-            if (kioskEmpty == false) {
+            if (kioskEmpty == false && kioskMadeChange == true) {
                 Console.WriteLine("\n--- Thank You For Your Patronage! Please Take Your Change ---");
                 for (int i = 0; i < totalChange.Count; i++) { // DISPLAYS EACH CHANGE DISPENSED
                     Console.WriteLine($"{totalChange[i]:C} dispensed");
@@ -107,6 +142,9 @@ namespace Kiosk {
             } else {
                 kioskMadeChange = false;
             }
+
+            amountInKiosk = SetKiosk();
+
             return kioskMadeChange;
         }
 
@@ -126,6 +164,7 @@ namespace Kiosk {
             double partialPay = 0;
             double totalCreditAndCash = 0;
 
+            amountInKiosk = SetKiosk();
             kioskEmpty = amountInKiosk <= 0;
 
             if (!kioskEmpty) { // CHECKS IF THERE'S MONEY IN KIOSK BEFORE ASKING FOR CASH BACK
@@ -274,26 +313,49 @@ namespace Kiosk {
             double returnCash = 0; // HOW MUCH TO RETURN FOR CASH BACK
             int denomLen = denoms.Length;
             double totalWanted = cashWanted;
+            double[] moneyUsed = new double[denomAmnts.Length];
+            List<double> cashGiven = new List<double>();
             // GOES THROUGH KIOSK SIMILAR TO MAKING CHANGE - CHECKS IF KIOSK CAN MAKE CHANGE
 
+            for (int i = 0; i < denomAmnts.Length; i++) {
+                moneyUsed[i] = denomAmnts[i];
+            }
 
             for (int i = denomLen - 1; i >= 0; i--) { // GOES THROUGH DENOMS BY LENGTH
                 while (totalWanted >= denoms[i]) { // CONTINUES SORTING THROUGH CHANGE WHILE TOTAL IS ABOVE DENOM AMOUNT
-                    amountInKiosk -= denoms[i];
+                    amountInKiosk = SetKiosk();
+                    amountInKiosk = Math.Round(amountInKiosk, 2);
                     if (amountInKiosk < 0) {
                         kioskEmpty = true;
-                        amountInKiosk += denoms[i];
                         break;
                     }
-                    returnCash += denoms[i];
-                    totalWanted -= denoms[i];
+                    if (denomAmnts[i] > 0) {
+                        denomAmnts[i]--;
+                        cashGiven.Add(denoms[i]);
+                        totalWanted -= denoms[i];
+                        totalWanted = Math.Round(totalWanted, 2);
+                    } else {
+                        break;
+                    }
                 }
+            }
+
+            returnCash = cashGiven.Sum();
+            returnCash = Math.Round(returnCash, 2);
+
+            if (returnCash < cashWanted) {
+                Console.WriteLine("Kiosk Cannot Complete Cashback Request");
+                returnCash = 0;
+                denomAmnts = moneyUsed;
+                amountInKiosk = SetKiosk();
+                amountInKiosk = Math.Round(amountInKiosk, 2);
             }
             if (kioskEmpty) { // CHECKS IF NOTHING IN KIOSK
                 Console.WriteLine("\nKiosk is Currently Out of Money. Cannot Supply Cash Back. Please Return\n");
-                amountInKiosk = returnCash;
                 returnCash = 0;
             }
+
+            amountInKiosk = SetKiosk();
 
             return returnCash;
         }

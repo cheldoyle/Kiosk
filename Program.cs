@@ -32,6 +32,7 @@ namespace Kiosk {
             string[] receiptInfo = new string[4]; // COLLECTS INFORMATION FOR RECEIPT
 
             while (continueTransactions) {
+
                 Console.Clear(); // CLEARS CONSOLE UPON NEW TRANSACTIONS
                 DateTime dateTime = DateTime.Now; // GRABS CURRENT DATE FOR DISPLAY AND RECEIPT
                 Console.WriteLine(dateTime.ToString()); // DISPLAYS CURRENT DATE AND TIME
@@ -67,7 +68,7 @@ namespace Kiosk {
                 int transID = rnd.Next(10000, 100000); // CREATES RANDOM NUM FOR ID (AESTHETIC ONLY)
 
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = @"C:\Users\starl\OneDrive\Documents\GitHub\ReceiptBuilder\bin\Debug\net8.0\ReceiptBuilder.exe";
+                startInfo.FileName = @"C:\Users\chels\source\repos\ReceiptMaker\bin\Debug\net8.0\ReceiptMaker.exe";
                 startInfo.Arguments = $"Transaction:{transactionNum} ID:{transID} Date:{dateDay} Total:{totalSpent:C} {cardDisplay}{receiptInfo[0]} Paid:{receiptInfo[1]} {changeDisplay}{receiptInfo[2]}";
                 Process.Start(startInfo);
 
